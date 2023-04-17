@@ -1,0 +1,90 @@
+npx create-expo-app vspj-events-app
+
+npx expo install @morrowdigital/watermelondb-expo-plug
+npx expo install expo-build-properties
+
+app.json:
+"plugins": [
+      "@morrowdigital/watermelondb-expo-plugin",
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "kotlinVersion": "1.6.10"
+          }
+        }
+      ]
+    ]
+
+
+npm install @nozbe/watermelondb
+npm install -D @babel/plugin-proposal-decorators
+
+babel.config.js:
+
+module.exports = function (api) {
+  api.cache(true);
+  return {
+    presets: ['babel-preset-expo'],
+    plugins: [['@babel/plugin-proposal-decorators', { legacy: true }]],
+  };
+};
+
+npx expo prebuild
+
+npx expo install expo-background-fetch
+
+npx expo install expo-auth-session expo-random
+
+npx expo install @reduxjs/toolkit
+npx expo install react-redux
+npx expo install redux-persist
+npx expo install redux-persist-expo-securestore
+npx expo install expo-secure-store
+npx expo install @react-native-async-storage/async-storage
+npx expo install axios
+
+npm i @neverdull-agency/expo-unlimited-secure-store
+
+expo install expo-file-system
+
+npm install axios-logger --save-dev
+npm i --save redux-logger
+npm install moment --save 
+npm install moment-timezone --save
+npx expo install expo-localization
+
+npm install react-native-dotenv
+
+
+emulator -avd Pixel_4a_API_30 -dns-server 192.168.8.205
+npx cross-env TEST=muj_test npx expo run:android
+
+npm install @react-navigation/native
+npx expo install react-native-screens react-native-safe-area-context
+
+npm install @react-navigation/stack
+npx expo install react-native-gesture-handler
+
+To finalize installation of react-native-gesture-handler, add the following at the top (make sure it's at the top and there's nothing else before it) of your entry file, such as index.js or App.js:
+
+import 'react-native-gesture-handler';
+
+npx expo install @react-native-masked-view/masked-view
+
+npm install @react-navigation/material-top-tabs react-native-tab-view
+npx expo install react-native-pager-view
+
+npx expo install @rneui/themed @rneui/base
+
+npm install recompose --save
+
+npm install formik yup
+
+npm install react-native-loading-spinner-overlay
+
+npm install html-entities
+
+npm install @react-navigation/bottom-tabs
+
+npm install --save react-native-calendars
