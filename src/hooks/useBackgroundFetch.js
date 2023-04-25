@@ -22,9 +22,9 @@ TaskManager.defineTask(BACKGROUND_FETCH_TASK, async () => {
     .then(() => {
       console.log('BACKGROUND_FETCH_TASK sync OK');
     })
-    .catch(() => {
+    .catch((err) => {
       console.log(err);
-      console.error(
+      console.warn(
         `BACKGROUND_FETCH_TASK An error occurred while attempting to synchronize WatermelonDB.`
       );
     });

@@ -52,7 +52,7 @@ const MainStackNavigator = () => {
         await sync(database);
       } catch (err) {
         console.log(err);
-        console.error(
+        console.warn(
           `An error occurred while attempting to synchronize WatermelonDB.`
         );
       }

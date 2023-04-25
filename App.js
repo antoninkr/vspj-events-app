@@ -27,9 +27,11 @@ const App = () => {
   const dispatch = useDispatch();
 
   const [status, isRegistered, toggleFetchTask] = useBackgroundFetch();
-  if (!isRegistered) {
-    toggleFetchTask();
-  }
+  useEffect(() => {
+    if (!isRegistered) {
+      toggleFetchTask();
+    }
+  }, [isRegistered]);
 
   const authorized = useSelector((state) => selectAuthorized(state));
   const moodleAuthorized = useSelector((state) =>
@@ -37,12 +39,10 @@ const App = () => {
   );
   const authTokenResponse = useSelector((state) => selectTokenResponse(state));
 
-  console.log(authTokenResponse);
-
   useEffect(() => {
     if (authorized) {
       dispatch(refreshIfNeeded()).catch((err) => {
-        console.log(`User isn't loged in.`, err.message);
+        console.log(`User isn't logged in.`, err.message);
       });
     }
   }, [authTokenResponse]);
@@ -60,8 +60,6 @@ const App = () => {
 
 export default () => {
   let [database] = useWatermelonDB();
-
-  console.log('AppWrapper refresh');
 
   let persistor = persistStore(store);
 

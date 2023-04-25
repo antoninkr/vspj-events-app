@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import { useFromTimeRerenderer } from '../hooks/useFromTimeRerender';
 import moment from 'moment-timezone';
 
 const EventBrief = ({ event, onPress }) => {
@@ -23,7 +22,6 @@ const EventBrief = ({ event, onPress }) => {
       fromNow = startAtMoment.format('MM.DD.YYYY');
     }
   }
-  const [refreshIn] = useFromTimeRerenderer(event.startAt, fromDate);
 
   return (
     <TouchableOpacity onPress={onPress}>
