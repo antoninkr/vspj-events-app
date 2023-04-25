@@ -4,6 +4,8 @@ import moment from 'moment-timezone';
 import Moment from 'react-moment';
 
 const EventBrief = ({ event, onPress }) => {
+  const [changes, increaseChanges] = useState(0);
+
   const { startAt, endAt } = event;
   const startAtMoment = moment(startAt);
   const endAtMoment = moment(endAt);
@@ -12,6 +14,18 @@ const EventBrief = ({ event, onPress }) => {
   //let fromNow = startAtMoment.from(fromDate);
   let fromNow = startAtMoment;
   let start = true;
+
+  if (endAtMoment.unix()) {
+    if (endAtMoment.unix() < moment().unix()) {
+      return null;
+    }
+  } else if (startAtMoment.unix()) {
+    if (startAtMoment.unix() < moment().unix()) {
+      return null;
+    }
+  } else {
+    return null;
+  }
 
   if (startAt.getTime() <= fromDate.getTime()) {
     start = false;
@@ -29,7 +43,16 @@ const EventBrief = ({ event, onPress }) => {
     */
   }
 
-  const fromNowJSX = <Moment date={fromNow} element={Text} fromNow />; //fromNow
+  const fromNowJSX = (
+    <Moment
+      date={fromNow}
+      element={Text}
+      fromNow
+      onChange={(value) => {
+        increaseChanges(value + 1);
+      }}
+    />
+  ); //fromNow
 
   return (
     <TouchableOpacity onPress={onPress}>
