@@ -75,8 +75,7 @@ const styles = StyleSheet.create({
 const enhance = R.compose(
   withDatabase,
   withObservables(['eventType'], ({ eventType, database }) => {
-    const fromDate = new Date(2022, 0, 14, 12, 33);
-    console.log('fromDate mocking', fromDate);
+    const fromDate = new Date();
 
     return {
       eventType,

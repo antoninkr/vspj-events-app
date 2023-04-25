@@ -1,9 +1,8 @@
-import { configureStore } from '@reduxjs/toolkit';
 import thunk from 'redux-thunk';
 import logger from 'redux-logger';
 
+import { configureStore } from '@reduxjs/toolkit';
 import authReducer from './authSlice';
-import moodleReducer from './moodleAuthSlice';
 import userReducer from './userSlice';
 
 import { combineReducers } from 'redux';
@@ -24,8 +23,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import createSecureStore from '@neverdull-agency/expo-unlimited-secure-store';
 
 // const logger = reduxLogger.createLogger();
-
-// <pridano>
 
 const secureStorage = createSecureStore();
 
@@ -50,13 +47,11 @@ const moodleAuthPersistConfig = {
 
 const reducers = combineReducers({
   auth: persistReducer(authPersistConfig, authReducer),
-  moodleAuth: persistReducer(moodleAuthPersistConfig, moodleReducer),
+  /* moodleAuth: persistReducer(moodleAuthPersistConfig, moodleReducer), */
   user: userReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, reducers);
-
-// </pridano>
 
 // combineReducers
 const store = configureStore({

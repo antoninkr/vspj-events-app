@@ -88,3 +88,5 @@ npm install html-entities
 npm install @react-navigation/bottom-tabs
 
 npm install --save react-native-calendars
+
+npx expo install expo-linking

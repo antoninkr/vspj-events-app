@@ -10,19 +10,34 @@ import {
   selectAuthorized,
   refreshIfNeeded,
   selectTokenResponse,
+  selectAccessToken,
+  selectMoodleUserToken,
+  selectMoodleAuthorized,
 } from './src/store/authSlice';
 import { NavigationContainer } from '@react-navigation/native';
 import MainStackNavigator from './src/navigations/MainStackNavigator';
 import LoginStackNavigator from './src/navigations/LoginStackNavigator';
 import DBErrorScreen from './src/screens/DBErrorScreen';
+import { getEvents } from './src/api/VSPJEvents';
+import { useBackgroundFetch } from './src/hooks/useBackgroundFetch';
 
 WebBrowser.maybeCompleteAuthSession();
 
 const App = () => {
   const dispatch = useDispatch();
 
+  const [status, isRegistered, toggleFetchTask] = useBackgroundFetch();
+  if (!isRegistered) {
+    toggleFetchTask();
+  }
+
   const authorized = useSelector((state) => selectAuthorized(state));
+  const moodleAuthorized = useSelector((state) =>
+    selectMoodleAuthorized(state)
+  );
   const authTokenResponse = useSelector((state) => selectTokenResponse(state));
+
+  console.log(authTokenResponse);
 
   useEffect(() => {
     if (authorized) {
@@ -34,7 +49,11 @@ const App = () => {
 
   return (
     <NavigationContainer>
-      {authorized ? <MainStackNavigator /> : <LoginStackNavigator />}
+      {authorized && moodleAuthorized ? (
+        <MainStackNavigator />
+      ) : (
+        <LoginStackNavigator />
+      )}
     </NavigationContainer>
   );
 };

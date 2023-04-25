@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { authenticateUser } from '../store/moodleAuthSlice';
+import { moodleAuthenticateUser } from '../store/authSlice';
 import MoodleLoginForm from '../components/MoodleLoginForm';
 
 const MoodleLogin = () => {
@@ -9,7 +9,7 @@ const MoodleLogin = () => {
   const [errorMessage, setErrorMessage] = useState('');
 
   const loginUser = ({ username, password }, formikActions) => {
-    dispatch(authenticateUser(username, password))
+    dispatch(moodleAuthenticateUser(username, password))
       .then(async (action) => {
         formikActions.setSubmitting(false);
       })

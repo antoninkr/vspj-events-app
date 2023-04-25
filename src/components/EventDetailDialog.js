@@ -10,6 +10,7 @@ import {
 import { Dialog } from '@rneui/themed';
 import BlackButton from '../components/buttons/BlackButton';
 import moment from 'moment';
+import * as Linking from 'expo-linking';
 
 const EventDetailDialog = ({ event, visible, closeDialog }) => {
   const [eventType, setEventType] = useState(null);
@@ -71,6 +72,17 @@ const EventDetailDialog = ({ event, visible, closeDialog }) => {
               </>
             ) : null}
           </ScrollView>
+        ) : null}
+
+        {event && event.url ? (
+          <View style={styles.btnContainer}>
+            <BlackButton
+              title="Otevřít"
+              onPress={() => {
+                Linking.openURL(event.url);
+              }}
+            />
+          </View>
         ) : null}
         <View style={styles.btnContainer}>
           <BlackButton title="Zavřít" onPress={closeDialog} />

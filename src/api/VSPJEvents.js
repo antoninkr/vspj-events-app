@@ -67,7 +67,7 @@ export const getEvents = async (
     params.to_date = moment(toDate).format('YYYY-MM-DD');
   }
   if (changedAfter) {
-    params.changed_after = moment(changedAfter).format('YYYY-MM-DD');
+    params.changed_after = moment(changedAfter).unix();
   }
   const response = await axiosInstance.get('/events/', { params });
   return response.data;

@@ -18,8 +18,9 @@ import {
 } from 'expo-auth-session';
 import Constants from 'expo-constants';
 import { logoutUser } from './userSlice';
+import { getUserToken } from '../api/Moodle';
 
-const clientId = Constants.expoConfig.extra.eventsApiOpenidConnectClientId;
+const clientId = Constants.expoConfig.extra.vspjEventsAppOpenidConnectClientId;
 const redirectUri = makeRedirectUri({
   scheme: Constants.expoConfig.scheme,
   path: 'redirect',
@@ -42,6 +43,10 @@ const initialState = {
 
   loading: false,
   error: '',
+
+  moodleAuthorizationExpired: false,
+  moodleUserToken: null,
+  moodleShouldShowSuccessMessage: false,
 };
 
 const getDiscovery = async () => {
@@ -81,10 +86,9 @@ export const refreshIfNeeded = () => {
             responseType: ResponseType.Code,
             scopes: [
               'openid',
-              'profile',
               'email',
               'offline_access',
-              `api://${Constants.expoConfig.extra.eventsApiOpenidConnectClientId}/Identity.Read`,
+              Constants.expoConfig.extra.vspjEventsApiOpenidConnectClaim,
             ],
             redirectUri,
             usePKCE: true,
@@ -110,11 +114,6 @@ export const refreshIfNeeded = () => {
   };
 };
 
-/*
- *  thunk function
- */
-// const authenticateUser;
-// lifecycle statuses of promise as actions - async action (action type, callback - contains async logic and returns promise) - generate pending, fulfilled and rejected action type
 export const authenticateUser = createAsyncThunk(
   'auth/authenticateUser',
   async (_, thunkAPI) => {
@@ -123,10 +122,9 @@ export const authenticateUser = createAsyncThunk(
       responseType: ResponseType.Code,
       scopes: [
         'openid',
-        'profile',
         'email',
         'offline_access',
-        `api://${Constants.expoConfig.extra.eventsApiOpenidConnectClientId}/Identity.Read`,
+        Constants.expoConfig.extra.vspjEventsApiOpenidConnectClaim,
       ],
       redirectUri,
       usePKCE: true,
@@ -160,7 +158,6 @@ export const authenticateUser = createAsyncThunk(
           code_verifier: request.codeVerifier,
         },
       });
-
       return exchangeTokenResponse.getRequestConfig();
     } catch (error) {
       console.warn(error.message);
@@ -168,6 +165,26 @@ export const authenticateUser = createAsyncThunk(
     }
   }
 );
+
+export const moodleAuthenticateUser = (username, password) => {
+  return async (dispatch, getState) => {
+    try {
+      const response = await getUserToken(username, password);
+      if (response.error) {
+        throw new Error(response.error);
+      } else if (response.token) {
+        dispatch(dispatch(authSlice.actions.moodleAuthenticate(response)));
+      } else {
+        throw new Error('Někde nastala chyba, omlouváme se.');
+      }
+    } catch (error) {
+      if (!error.response && error.code === 'ERR_NETWORK') {
+        throw new Error('Chyba připojení k Internetu.');
+      }
+      throw error;
+    }
+  };
+};
 
 const setTokenResponseConfigProperties = (state, action) => {
   state.accessToken = action.payload.accessToken;
@@ -196,6 +213,17 @@ const authSlice = createSlice({
     },
     successMessageShowed(state) {
       state.shouldShowSuccessMessage = false;
+    },
+    moodleAuthenticate(state, action) {
+      state.moodleUserToken = action.payload.token;
+      state.moodleAuthorizationExpired = false;
+      state.moodleShouldShowSuccessMessage = true;
+    },
+    moodleAuthorizationExpired(state) {
+      state.moodleAuthorizationExpired = true;
+    },
+    moodleSuccessMessageShowed(state) {
+      state.moodleShouldShowSuccessMessage = false;
     },
   },
   extraReducers: (builder) => {
@@ -284,6 +312,25 @@ export const selectTokenResponse = createSelector(
   }
 );
 
-export const { refresh, authorizationExpired, successMessageShowed } =
-  authSlice.actions;
+export const selectMoodleUserToken = (state) => state.auth.moodleUserToken;
+export const selectMoodleAuthorizationExpired = (state) =>
+  state.auth.moodleAuthorizationExpired;
+
+export const selectMoodleShouldShowSuccessMessage = (state) =>
+  state.auth.moodleShouldShowSuccessMessage;
+
+export const selectMoodleAuthorized = createSelector(
+  [selectMoodleUserToken, selectMoodleAuthorizationExpired],
+  (moodleUserToken, moodleAuthorizationExpired) => {
+    return moodleUserToken && !moodleAuthorizationExpired;
+  }
+);
+
+export const {
+  refresh,
+  authorizationExpired,
+  successMessageShowed,
+  moodleSuccessMessageShowed,
+  moodleAuthorizationExpired,
+} = authSlice.actions;
 export default authSlice.reducer;

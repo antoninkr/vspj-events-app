@@ -53,7 +53,7 @@ const SettingsScreen = () => {
       <Divider style={{ marginVertical: 8 }} />
       <Button
         onPress={() => {
-          navigation.navigate('EventTypesSettingsScreen');
+          navigation.navigate('EventTypesSettingsScreen2');
         }}
         containerStyle={styles.eventTypesBtn}
         title="Nastavení typů událostí"

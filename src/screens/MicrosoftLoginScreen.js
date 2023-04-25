@@ -24,7 +24,7 @@ const MicrosoftLoginScreen = () => {
         ) : (
           <>
             <Text h4 style={{ flex: 20 }}>
-              Přihašte se prosím pomocí Vašeho VŠPJ účtu Microsoft.
+              Přihlaste se prosím pomocí Vašeho VŠPJ účtu Microsoft.
             </Text>
             <View style={{ flex: 20 }}>
               <MicrosoftButton

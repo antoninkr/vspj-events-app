@@ -5,12 +5,16 @@ import R from 'ramda';
 import { View, FlatList, SafeAreaView, StyleSheet } from 'react-native';
 import { Text } from '@rneui/themed';
 import { getEventTypes } from '../model/helpers';
-import EventTypeSettingRow from '../model/EventTypeSettingRow';
+import EventTypeSettingRow from '../components/EventTypeSettingRow';
 import BlackButton from '../components/buttons/BlackButton';
 import { useNavigation } from '@react-navigation/native';
+import { useDispatch } from 'react-redux';
+import { eventTypesWasSelected } from '../store/userSlice';
 
 const EventTypesSettingsScreen = ({ eventTypes }) => {
   const navigation = useNavigation();
+  const dispatch = useDispatch();
+
   return (
     <SafeAreaView style={styles.container}>
       <Text h3>Vyberte typy událostí, které Vás zajímají:</Text>
@@ -24,7 +28,10 @@ const EventTypesSettingsScreen = ({ eventTypes }) => {
       <View style={{ alignItems: 'center', marginTop: 10 }}>
         <BlackButton
           title={'Pokračovat'}
-          onPress={() => navigation.navigate('BottomTabsNavigator')}
+          onPress={() => {
+            navigation.navigate('BottomTabsNavigator');
+            dispatch(eventTypesWasSelected());
+          }}
         />
       </View>
     </SafeAreaView>

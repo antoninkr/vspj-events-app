@@ -6,36 +6,26 @@ import MoodleLogin from '../components/MoodleLogin';
 import SuccessMessage from '../components/SuccessMessage';
 import { SafeAreaView } from 'react-native';
 import { useSelector } from 'react-redux';
+
 import {
-  selectAuthorizationExpired,
-  selectAuthorized,
-  selectUserToken,
-} from '../store/moodleAuthSlice';
+  selectMoodleAuthorizationExpired,
+  selectMoodleAuthorized,
+  selectMoodleUserToken,
+} from '../store/authSlice';
 import { useNavigation } from '@react-navigation/native';
 
 const MoodleLoginScreen = () => {
   const navigation = useNavigation();
-  const userToken = useSelector((state) => selectUserToken(state));
+  const userToken = useSelector((state) => selectMoodleUserToken(state));
   // const authorizationExpired = useSelector((state) =>
-  //   selectAuthorizationExpired(state)
+  //   selectMoodleAuthorizationExpired(state)
   // );
-  const authorized = useSelector((state) => selectAuthorized(state));
 
   // const loggedIn = userToken && !authorizationExpired;
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      {authorized ? (
-        <SuccessMessage
-          messageText={'Byl/a jste úspěšně přihlášen/a do VŠPJ Moodle'}
-          buttonText="Pokračovat"
-          onButtonPress={() => {
-            navigation.navigate('BottomTabsNavigator');
-          }}
-        />
-      ) : (
-        <MoodleLogin />
-      )}
+      <MoodleLogin />
     </SafeAreaView>
   );
 };

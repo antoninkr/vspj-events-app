@@ -3,17 +3,17 @@ import React from 'react';
 import { View, StyleSheet, Text, Button } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectError } from '../store/userSlice';
-import { successMessageShowed } from '../store/authSlice';
+import { moodleSuccessMessageShowed } from '../store/authSlice';
 import SuccessMessage from '../components/SuccessMessage';
 
-const LoginSuccessScreen = () => {
+const MoodleLoginSuccessScreen = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const error = useSelector(selectError);
 
   return (
     <SuccessMessage
-      messageText="Byl/a jste úspěšně přihášen/a pomocí účtu Microsoft."
+      messageText={'Byl/a jste úspěšně přihlášen/a do VŠPJ Moodle'}
       buttonText="Pokračovat"
       onButtonPress={() => {
         /*
@@ -23,7 +23,7 @@ const LoginSuccessScreen = () => {
           navigation.navigate('MoodleLoginScreen');
         }
         */
-        dispatch(successMessageShowed());
+        dispatch(moodleSuccessMessageShowed());
       }}
     />
   );
@@ -31,4 +31,4 @@ const LoginSuccessScreen = () => {
 
 const styles = StyleSheet.create({});
 
-export default LoginSuccessScreen;
+export default MoodleLoginSuccessScreen;

@@ -9,11 +9,11 @@ import { getUserToken } from '../api/Moodle';
 import { logoutUser } from './userSlice';
 
 const initialState = {
-  authorizationExpired: false,
-  userToken: null,
+  moodleAuthorizationExpired: false,
+  moodleUserToken: null,
 };
 
-export const authenticateUser = (username, password) => {
+export const moodleAuthenticateUser = (username, password) => {
   return async (dispatch, getState) => {
     try {
       const response = await getUserToken(username, password);
@@ -37,11 +37,11 @@ const moodleAuthSlice = createSlice({
   name: 'moodleAuth',
   initialState,
   reducers: {
-    authenticate(state, action) {
+    moodleAuthenticate(state, action) {
       state.userToken = action.payload.token;
       state.authorizationExpired = false;
     },
-    authorizationExpired(state) {
+    moodleAuthorizationExpired(state) {
       state.authorizationExpired = true;
     },
   },
@@ -52,9 +52,9 @@ const moodleAuthSlice = createSlice({
   },
 });
 
-export const selectUserToken = (state) => state.moodleAuth.userToken;
+export const selectUserToken = (state) => state.auth.userToken;
 export const selectAuthorizationExpired = (state) =>
-  state.moodleAuth.authorizationExpired;
+  state.auth.authorizationExpired;
 
 export const selectAuthorized = createSelector(
   [selectUserToken, selectAuthorizationExpired],

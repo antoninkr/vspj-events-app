@@ -75,7 +75,7 @@ const styles = StyleSheet.create({
 const enhance = R.compose(
   withDatabase,
   withObservables([], ({ database }) => {
-    const fromDate = new Date(2022, 0, 14, 12, 33);
+    const fromDate = new Date(); // 2022, 0, 14, 12, 33
     return {
       events: getAllEvents(database, fromDate),
     };

@@ -19,35 +19,15 @@ const Tab = createMaterialTopTabNavigator();
 
 const EventsTopTabNavigator = ({ eventTypes }) => {
   const { width } = useWindowDimensions();
-  const database = useDatabase();
 
-  const [synchronizationEnded, setSynchronizationEnded] = useState(false);
-
-  useEffect(() => {
-    const synchronize = async () => {
-      try {
-        await sync(database);
-      } catch (err) {
-        console.log(err);
-        console.error(
-          `An error occurred while attempting to synchronize WatermelonDB.`
-        );
-      }
-      setTimeout(() => {
-        setSynchronizationEnded(true);
-      }, 2000);
-    };
-    synchronize();
-  }, []);
-
-  return eventTypes.length ? (
+  return (
     <Tab.Navigator
       screenOptions={{
         tabBarScrollEnabled: true,
         tabBarLabelStyle: { fontSize: 12 },
         tabBarItemStyle: { width: calculateTabWidth(width) },
         tabBarStyle: { backgroundColor: 'powderblue' },
-        tabBarLabelStyle: { textTransform: 'lowercase' },
+        tabBarLabelStyle: { textTransform: 'none' },
       }}
     >
       <Tab.Screen
@@ -66,19 +46,13 @@ const EventsTopTabNavigator = ({ eventTypes }) => {
         />
       ))}
     </Tab.Navigator>
-  ) : (
-    <EventsLoading
-      text="Načítání událostí..."
-      loadingFailed={synchronizationEnded}
-      errorMessage="Někde nastala chyba při načítání událostí. Zkuste to prosím později."
-    />
   );
 };
 
 const enhance = R.compose(
   withDatabase,
   withObservables([], ({ database }) => ({
-    eventTypes: getFavoriteEventTypes(database), // Shortcut syntax for `post.comments.observe()`
+    eventTypes: getFavoriteEventTypes(database),
   }))
 );
 

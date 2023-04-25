@@ -10,6 +10,8 @@ const parseMoodleEvent = (moodleEvent) => {
   const endAt =
     parseInt(moodleEvent.timestart) + parseInt(moodleEvent.timeduration);
   const recurrent = false;
+  const url = moodleEvent.url;
+  const moodleTimemodifiedAt = new Date(moodleEvent.timemodified * 1000);
 
   if (!id || !moodleEvent.name || !startAt) {
     throw new Error(`Invalid format of the Moodle event id: ${serverId}`);
@@ -26,6 +28,8 @@ const parseMoodleEvent = (moodleEvent) => {
     startDateTime: startAtDate.toISOString(),
     endDateTime: endAtDate.toISOString(),
     recurrent,
+    url,
+    moodleTimemodifiedAt,
   };
 };
 

@@ -3,7 +3,10 @@ import store from './../store/store';
 import * as AxiosLogger from 'axios-logger';
 import Constants from 'expo-constants';
 import { newAbortSignal } from '../helpers/axios';
-import { selectUserToken } from '../store/moodleAuthSlice';
+import {
+  moodleAuthorizationExpired,
+  selectMoodleUserToken,
+} from '../store/authSlice';
 
 const axiosInstance = axios.create({
   baseURL: Constants.expoConfig.extra.moodleUrl,
@@ -36,7 +39,8 @@ export const getUserToken = async (username, password) => {
 };
 
 export const getEvents = async () => {
-  const userToken = selectUserToken(store.getState());
+  const userToken = selectMoodleUserToken(store.getState());
+  console.log('moodleuserToken', userToken);
   const response = await axiosInstance.get('/webservice/rest/server.php', {
     params: {
       wsfunction: 'core_calendar_get_calendar_upcoming_view',
@@ -44,6 +48,10 @@ export const getEvents = async () => {
       wstoken: userToken,
     },
   });
+  if (response.data.errorcode === 'invalidtoken') {
+    store.dispatch(moodleAuthorizationExpired());
+  }
+
   return response.data;
 };
 

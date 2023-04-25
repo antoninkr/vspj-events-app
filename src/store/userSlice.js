@@ -1,10 +1,18 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import {
+  createSlice,
+  createAsyncThunk,
+  createSelector,
+} from '@reduxjs/toolkit';
 import { getLoggedInUser } from './../api/VSPJEvents';
+
 const initialState = {
   rc: '',
   email: '',
   firstName: '',
   lastName: '',
+
+  firstSynchronizationMade: false,
+  eventTypesSelected: false,
 
   loaded: false,
   loading: false,
@@ -56,6 +64,14 @@ export const logoutUser = createAsyncThunk(
 const userSlice = createSlice({
   name: 'user',
   initialState,
+  reducers: {
+    firstSynchronizationSucceeded(state, action) {
+      state.firstSynchronizationMade = true;
+    },
+    eventTypesWasSelected(state, action) {
+      state.eventTypesSelected = true;
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(fetchLoggedInUser.pending, (state) => {
       state.loading = true;
@@ -97,5 +113,15 @@ export const selectEmail = (state) => state.user.email;
 export const selectFirstName = (state) => state.user.firstName;
 export const selectLastName = (state) => state.user.lastName;
 export const selectError = (state) => state.user.error;
+export const selectFirstSynchronizationMade = (state) =>
+  state.user.firstSynchronizationMade;
+export const selectEventTypesSelected = (state) =>
+  state.user.eventTypesSelected;
 
+export const selectUserLoaded = createSelector([selectRc], (rc) => {
+  return rc ? true : false;
+});
+
+export const { firstSynchronizationSucceeded, eventTypesWasSelected } =
+  userSlice.actions;
 export default userSlice.reducer;

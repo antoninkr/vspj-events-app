@@ -1,6 +1,10 @@
 {
   "name": "vspj-events-app",
   "version": "1.0.0",
+  "author": {
+    "name": "Antonín Kroupa",
+    "email": "kroupa08@student.vspj.cz"
+  },
   "scripts": {
     "start": "expo start --dev-client",
     "android": "expo run:android",
@@ -50,7 +54,8 @@
     "redux-logger": "^3.0.6",
     "redux-persist": "^6.0.0",
     "redux-persist-expo-securestore": "^2.0.0",
-    "yup": "^1.0.2"
+    "yup": "^1.0.2",
+    "expo-linking": "~4.0.1"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

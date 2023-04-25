@@ -20,7 +20,9 @@ export default class EventType extends Model {
     description,
     startAt,
     endAt,
-    recurrent
+    recurrent,
+    url,
+    moodleTimemodifiedAt
   ) {
     const newEvent = await this.collections
       .get('events')
@@ -32,6 +34,12 @@ export default class EventType extends Model {
         event.startAt = startAt;
         event.endAt = endAt;
         event.recurrent = recurrent;
+        if (url) {
+          event.url = url;
+        }
+        if (moodleTimemodifiedAt) {
+          event.moodleTimemodifiedAt = moodleTimemodifiedAt;
+        }
       });
     return newEvent;
   }

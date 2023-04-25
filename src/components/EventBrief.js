@@ -7,7 +7,7 @@ const EventBrief = ({ event, onPress }) => {
   const { startAt, endAt } = event;
   const startAtMoment = moment(startAt);
   const endAtMoment = moment(endAt);
-  const fromDate = new Date(2022, 0, 14, 12, 33);
+  const fromDate = new Date(); // 2022, 0, 14, 12, 33
   // const fromDate = new Date();
   let fromNow = startAtMoment.from(fromDate);
   let start = true;
@@ -28,7 +28,7 @@ const EventBrief = ({ event, onPress }) => {
   return (
     <TouchableOpacity onPress={onPress}>
       <View style={styles.container}>
-        <Text style={styles.title}>{event.title}</Text>
+        <Text style={styles.title}>{event.title.replace(/&quot;/g, '"')}</Text>
         <Text style={styles.time}>{start ? fromNow : 'Probíhá'}</Text>
       </View>
     </TouchableOpacity>
