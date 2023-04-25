@@ -40,7 +40,7 @@ TaskManager.defineTask(BACKGROUND_FETCH_TASK, async () => {
 
 async function registerBackgroundFetchAsync() {
   return BackgroundFetch.registerTaskAsync(BACKGROUND_FETCH_TASK, {
-    minimumInterval: 60 * 1, // 15 minutes
+    minimumInterval: 60 * 15, // 15 minutes
     stopOnTerminate: false, // android only,
     startOnBoot: true, // android only
   });
