@@ -1,5 +1,5 @@
 import { Q } from '@nozbe/watermelondb';
-import { decodeEntity } from 'html-entities';
+import { decode } from 'html-entities';
 import { synchronize } from '@nozbe/watermelondb/sync';
 import { getEventTypes, getEvents } from '../api/VSPJEvents';
 import { getMoodleEvents } from './synchronization/moodle';
@@ -131,8 +131,8 @@ async function syncEvents(database, eventTypes, events) {
               .get(event.eventTypeId.toString())
               .prepareAddEvent(
                 event.id.toString(),
-                decodeEntity(event.title),
-                decodeEntity(event.description),
+                decode(event.title),
+                decode(event.description),
                 new Date(event.startDateTime),
                 new Date(event.endDateTime),
                 event.recurrent,
@@ -151,8 +151,8 @@ async function syncEvents(database, eventTypes, events) {
         // ) {
         batchWriters.push(
           savedEvents[0].prepareUpdate((e) => {
-            e.title = decodeEntity(event.title);
-            e.description = decodeEntity(event.description);
+            e.title = decode(event.title);
+            e.description = decode(event.description);
             e.startAt = new Date(event.startDateTime);
             e.endAt = new Date(event.endDateTime);
             e.recurrent = event.recurrent;
