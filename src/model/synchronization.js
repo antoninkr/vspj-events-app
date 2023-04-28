@@ -27,13 +27,14 @@ export async function sync(database) {
       let timestamp;
 
       try {
+        await store.dispatch(refreshIfNeeded());
+
         if (
           !selectAuthorized(store.getState()) ||
           !selectMoodleAuthorized(store.getState())
         ) {
           throw new Error('User is not authorized!');
         }
-        await store.dispatch(refreshIfNeeded());
 
         if (!selectUserLoaded(store.getState())) {
           store.dispatch(fetchLoggedInUser());
@@ -41,7 +42,7 @@ export async function sync(database) {
 
         const eventTypes = await getEventTypes();
 
-        const eventTypesMap = await syncEventsTypes(database, eventTypes);
+        const eventTypesMap = await syncEventsTypes(database, eventTypes); // full reload
         const eventsResponse = await getEvents(
           fromMoment ? fromMoment.toDate() : null,
           null,
@@ -89,6 +90,7 @@ async function syncEventsTypes(database, eventTypes) {
         .query(Q.where('server_id', eventType.id.toString()))
         .fetch();
       if (eventTypesC.length === 0) {
+        // TODO: Full reload
         eventTypesMap.set(
           eventType.id.toString(),
           await database.get('event_types').create((et) => {
