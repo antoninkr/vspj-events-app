@@ -11,6 +11,7 @@ import {
 } from '../store/authSlice';
 import moment from 'moment-timezone';
 import { fetchLoggedInUser, selectUserLoaded } from '../store/userSlice';
+import { showNotification } from '../helpers/notifications';
 
 export async function sync(database) {
   await synchronize({
@@ -53,7 +54,12 @@ export async function sync(database) {
         const events = eventsResponse.events;
 
         const moodleEvents = await getMoodleEvents();
-        await syncEvents(database, eventTypesMap, events.concat(moodleEvents));
+        await syncEvents(
+          database,
+          eventTypesMap,
+          events.concat(moodleEvents),
+          !lastPulledAt
+        );
       } catch (err) {
         if (err.response) {
           console.log('ERROR status:', err.response.status);
@@ -117,7 +123,7 @@ async function syncEventsTypes(database, eventTypes) {
   });
 }
 
-async function syncEvents(database, eventTypes, events) {
+async function syncEvents(database, eventTypes, events, firstSync) {
   return await database.write(async (writer) => {
     const batchWriters = [];
 
@@ -143,6 +149,11 @@ async function syncEvents(database, eventTypes, events) {
               )
           )
         );
+
+        if (!firstSync) {
+          showNotification(`Nová událost: ${event.title}`, event.description);
+        }
+
         // console.log(event.startAt, event.endAt);
         console.log(`create event ${event.id}`);
       } else if (savedEvents.length >= 1) {

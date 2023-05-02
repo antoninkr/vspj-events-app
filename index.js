@@ -5,6 +5,8 @@ import moment from 'moment-timezone';
 import 'moment/locale/cs';
 import { LocaleConfig } from 'react-native-calendars';
 import App from './App';
+import * as Notifications from 'expo-notifications';
+import { showNotification } from './src/helpers/notifications';
 
 moment.locale('cs');
 
@@ -18,6 +20,14 @@ LocaleConfig.locales['cs'] = {
 };
 
 LocaleConfig.defaultLocale = 'cs';
+
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowAlert: true,
+    shouldPlaySound: true,
+    shouldSetBadge: true,
+  }),
+});
 
 // registerRootComponent calls AppRegistry.registerComponent('main', () => App);
 // It also ensures that whether you load the app in Expo Go or in a native build,

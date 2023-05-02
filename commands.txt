@@ -92,3 +92,5 @@ npm install --save react-native-calendars
 npx expo install expo-linking
 
 npm install --save moment react-moment
+
+npx expo install expo-notifications
