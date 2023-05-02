@@ -5,7 +5,10 @@ const parseMoodleEvent = (moodleEvent) => {
   const id = `5-${moodleEvent.id}`;
   const eventTypeId = 5;
   const title = `${moodleEvent.course.shortname} - ${moodleEvent.name}`;
-  const description = moodleEvent.description;
+
+  const regex = /(<([^>]+)>)/gi;
+  const description = moodleEvent.description.replace(regex, '');
+
   const startAt = parseInt(moodleEvent.timestart);
   const endAt =
     parseInt(moodleEvent.timestart) + parseInt(moodleEvent.timeduration);
