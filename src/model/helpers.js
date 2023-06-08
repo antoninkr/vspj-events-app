@@ -1,10 +1,13 @@
 import { Q } from '@nozbe/watermelondb';
 import moment from 'moment';
 
-export const getEventTypes = (database) => database.get('event_types').query();
+export const getEventTypes = (database) =>
+  database.get('event_types').query(Q.sortBy('order', Q.asc));
 
 export const getFavoriteEventTypes = (database) =>
-  database.get('event_types').query(Q.where('is_favorite', true));
+  database
+    .get('event_types')
+    .query(Q.where('is_favorite', true), Q.sortBy('order', Q.asc));
 
 export const setIsFavorite = async (database, eventType, favorite) => {
   await database.write(async () => {

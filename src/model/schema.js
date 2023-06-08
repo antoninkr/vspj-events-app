@@ -11,6 +11,7 @@ export default appSchema({
         { name: 'server_id', type: 'string', isIndexed: true },
         { name: 'description', type: 'string' },
         { name: 'is_favorite', type: 'boolean', isIndexed: true },
+        { name: 'order', type: 'number' },
       ],
     }),
     tableSchema({

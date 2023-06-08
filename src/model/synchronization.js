@@ -99,12 +99,12 @@ async function syncEventsTypes(database, eventTypes) {
         .query(Q.where('server_id', eventType.id.toString()))
         .fetch();
       if (eventTypesC.length === 0) {
-        // TODO: Full reload
         eventTypesMap.set(
           eventType.id.toString(),
           await database.get('event_types').create((et) => {
             et.serverId = eventType.id.toString();
             et.description = eventType.description;
+            et.order = eventType.order;
             et.isFavorite = true;
           })
         );
@@ -113,6 +113,7 @@ async function syncEventsTypes(database, eventTypes) {
         if (eventTypesC[0].description !== eventType.description) {
           await eventTypesC[0].update((et) => {
             et.description = eventType.description;
+            et.order = eventType.order;
           });
           console.log(`update event type ${eventType.id}`);
         }

@@ -10,6 +10,7 @@ export default class EventType extends Model {
 
   @text('server_id') serverId;
   @text('description') description;
+  @field('order') order;
   @field('is_favorite') isFavorite;
 
   @children('events') events;
