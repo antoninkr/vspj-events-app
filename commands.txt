@@ -1,3 +1,12 @@
+// Run 
+emulator -avd Pixel_4a_API_30 -dns-server 192.168.8.136
+npx cross-env EVENTS_API_OPENID_CONNECT_PROVIDER_URL=url_value VSPJ_EVENTS_APP_OPENID_CONNECT_CLIENT_ID=id_value VSPJ_EVENTS_API_OPENID_CONNECT_CLAIM=claim_value VSPJ_EVENTS_API_URL=api_url MOODLE_URL=moodle_url npx expo run:android
+
+
+// Build
+eas build --platform android --profile test --local
+
+
 npx create-expo-app vspj-events-app
 
 npx expo install @morrowdigital/watermelondb-expo-plug
@@ -94,3 +103,5 @@ npx expo install expo-linking
 npm install --save moment react-moment
 
 npx expo install expo-notifications
+
+npm install --global eas-cli

@@ -14,7 +14,8 @@
     },
     "assetBundlePatterns": ["**/*"],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "cz.vspj.events"
     },
     "android": {
       "adaptiveIcon": {
@@ -32,11 +33,19 @@
         "expo-build-properties",
         {
           "android": {
-            "kotlinVersion": "1.6.10"
+            "kotlinVersion": "1.6.10",
+            "compileSdkVersion": 33,
+            "targetSdkVersion": 33,
+            "buildToolsVersion": "33.0.0"
           }
         }
       ],
       "expo-localization"
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "5a52f34c-de24-461e-b997-53388ae6ba8b"
+      }
+    }
   }
 }

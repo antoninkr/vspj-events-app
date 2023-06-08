@@ -11,7 +11,10 @@ import {
 } from '../store/authSlice';
 import moment from 'moment-timezone';
 import { fetchLoggedInUser, selectUserLoaded } from '../store/userSlice';
-import { showNotification } from '../helpers/notifications';
+import {
+  showNewEventNotification,
+  showNotification,
+} from '../helpers/notifications';
 
 export async function sync(database) {
   await synchronize({
@@ -133,25 +136,26 @@ async function syncEvents(database, eventTypes, events, firstSync) {
         .query(Q.where('server_id', event.id.toString()))
         .fetch();
       if (savedEvents.length === 0) {
+        const eventType = eventTypes.get(event.eventTypeId.toString());
+
         batchWriters.push(
           await writer.callWriter(() =>
-            eventTypes
-              .get(event.eventTypeId.toString())
-              .prepareAddEvent(
-                event.id.toString(),
-                decode(event.title),
-                decode(event.description),
-                new Date(event.startDateTime),
-                new Date(event.endDateTime),
-                event.recurrent,
-                event.url,
-                event.moodleTimemodifiedAt
-              )
+            eventType.prepareAddEvent(
+              event.id.toString(),
+              decode(event.title),
+              decode(event.description),
+              new Date(event.startDateTime),
+              new Date(event.endDateTime),
+              event.recurrent,
+              event.url,
+              event.moodleTimemodifiedAt
+            )
           )
         );
 
-        if (!firstSync) {
-          showNotification(`Nová událost: ${event.title}`, event.description);
+        if (!firstSync && eventType.isFavorite) {
+          showNewEventNotification(event);
+          // showNotification(`Nová událost: ${event.title}`, event.description);
         }
 
         // console.log(event.startAt, event.endAt);
